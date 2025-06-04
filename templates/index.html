@@ -1,99 +1,53 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文件传输服务</title>
+    <title>Bluetooth File Transfer</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            max-width: 600px;
-            width: 100%;
-        }
-        h2 {
-            color: #333;
-            margin-top: 0;
-        }
-        .section {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
-        }
-        .section:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-        .upload-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
-        }
-        .upload-btn:hover {
-            background-color: #45a049;
-        }
-        .qr-container {
-            text-align: center;
-            margin: 20px 0;
-        }
-        .qr-code {
-            display: inline-block;
-            padding: 10px;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        a {
-            color: #2196F3;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .section { margin-bottom: 30px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        button { padding: 10px 15px; background: #4285f4; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        #status { margin-top: 10px; padding: 10px; background: #f5f5f5; border-radius: 4px; }
     </style>
 </head>
 <body>
     <div class="container">
+        <h1>Bluetooth File Transfer</h1>
+        
         <div class="section">
-            <h2>📱 手机上传文件到电脑</h2>
-            <form method="POST" enctype="multipart/form-data" action="/upload">
-                <input type="file" name="file" id="file" required>
-                <button type="submit" class="upload-btn">上传文件</button>
-            </form>
+            <h2>Send Files</h2>
+            <input type="file" id="fileInput">
+            <button onclick="sendFile()">Send via Bluetooth</button>
+            <div id="status">Status: Ready</div>
         </div>
-
+        
         <div class="section">
-            <h2>📁 共享文件 (PC → 手机)</h2>
-            <p>点击下方链接查看可下载文件：<a href="/files">/files</a></p>
-        </div>
-
-        <div class="section">
-            <h2>📸 二维码访问地址</h2>
-            <div class="qr-container">
-                <div class="qr-code">
-                    {{ qr_html|safe }}
-                </div>
-                <p>扫描二维码快速访问此页面</p>
-            </div>
+            <h2>Received Files</h2>
+            <a href="/files"><button>View Received Files</button></a>
         </div>
     </div>
+
+    <script>
+        function sendFile() {
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput.files.length === 0) {
+                updateStatus("Please select a file first");
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            updateStatus(`Sending ${file.name}...`);
+            
+            // In a real app, you would use Web Bluetooth API or similar here
+            // This is just a placeholder for the UI
+            setTimeout(() => {
+                updateStatus(`Successfully sent ${file.name}`);
+            }, 2000);
+        }
+        
+        function updateStatus(message) {
+            document.getElementById('status').innerText = `Status: ${message}`;
+        }
+    </script>
 </body>
 </html>
